@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Kling 3.0 Scene 2 — Revised v2 Stitch-Ready</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0c0a08;--card:#1a1714;--border:#2c2820;--accent:#c8954a;--a2:#e05c3a;--gold:#f0c060;--text:#ede8df;--muted:#7a6f60;--mono:'DM Mono',monospace;--dp:'Playfair Display',serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;padding-bottom:80px;}
+.top{background:linear-gradient(135deg,#1a1209,#0c0a08);border-bottom:1px solid var(--border);padding:30px 48px 26px;position:relative;overflow:hidden;}
+.top::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--a2),var(--accent),var(--gold));}
+.ey{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;}
+h1{font-family:var(--dp);font-size:clamp(24px,4vw,48px);font-weight:900;line-height:1.05;margin-bottom:10px;}
+h1 em{color:var(--accent);font-style:normal;}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.b{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;padding:3px 11px;border:1px solid var(--border);border-radius:2px;color:var(--muted);text-transform:uppercase;}
+.b.hot{border-color:var(--accent);color:var(--accent);}
+.b.rev{border-color:#6a4a88;color:#b898dd;}
+.ss{background:#100e0c;border-bottom:1px solid var(--border);padding:11px 48px;display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+.sl{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-right:4px;}
+.st{font-family:var(--mono);font-size:9px;padding:3px 9px;background:#1e1a14;border:1px solid #3a2e1e;color:var(--gold);border-radius:2px;}
+.refs{padding:18px 48px;border-bottom:1px solid var(--border);}
+.rtitle{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
+.rg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+.ri{width:100%;height:95px;object-fit:cover;display:block;}
+.rl{font-family:var(--mono);font-size:9px;color:var(--muted);padding:6px 8px;text-transform:uppercase;border-top:1px solid var(--border);}
+.main{padding:26px 48px;}
+.st2{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.sum{background:#141210;border:1px solid var(--border);border-radius:4px;padding:16px 20px;margin-bottom:24px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.sv{font-family:var(--dp);font-size:28px;color:var(--accent);font-weight:900;line-height:1;margin-bottom:3px;text-align:center;}
+.sk{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;text-align:center;}
+.gc{background:var(--card);border:1px solid var(--border);border-radius:4px;margin-bottom:12px;overflow:hidden;transition:border-color .2s;}
+.gc:hover{border-color:var(--accent);}
+.gh{display:grid;grid-template-columns:68px 1fr auto;align-items:center;gap:16px;padding:14px 18px;cursor:pointer;}
+.gc.open .gh{border-bottom:1px solid var(--border);}
+.gn{font-family:var(--dp);font-size:32px;font-weight:900;color:var(--accent);line-height:1;}
+.gm{flex:1;}
+.gs{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:4px;}
+.chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px;}
+.ch1{font-family:var(--mono);font-size:8px;padding:2px 7px;background:#1e1a14;border:1px solid #3a2e1e;color:var(--gold);border-radius:2px;}
+.ch2{font-family:var(--mono);font-size:8px;padding:2px 7px;background:#12100e;border:1px solid #2c2820;color:#a08060;border-radius:2px;}
+.gd{font-size:11px;font-weight:300;color:var(--muted);margin-top:3px;font-style:italic;}
+.gdu{display:flex;flex-direction:column;align-items:flex-end;gap:3px;}
+.dv{font-family:var(--dp);font-size:20px;color:var(--a2);font-weight:700;}
+.dk{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.arr{font-size:10px;color:var(--muted);transition:transform .2s;margin-left:8px;}
+.gc.open .arr{transform:rotate(180deg);}
+.gb{display:none;padding:18px;}
+.gc.open .gb{display:block;}
+.sr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.sb{padding:9px 11px;border-radius:3px;}
+.si{background:#0a100a;border:1px solid #1a3a1a;border-left:3px solid #3a8a3a;}
+.so{background:#100a0a;border:1px solid #3a1a1a;border-left:3px solid #8a3a3a;}
+.sl2{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.si .sl2{color:#4a9a4a;}
+.so .sl2{color:#9a4a4a;}
+.st3{font-size:11px;font-weight:300;color:#aaa;line-height:1.5;}
+.tb{display:flex;height:22px;border-radius:3px;overflow:hidden;margin-bottom:14px;border:1px solid var(--border);}
+.ts{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:7px;color:rgba(255,255,255,.7);text-transform:uppercase;border-right:1px solid rgba(0,0,0,.3);overflow:hidden;white-space:nowrap;padding:0 3px;}
+.ts:last-child{border-right:none;}
+.sq{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;}
+.sqr{display:grid;grid-template-columns:48px 80px 1fr;gap:9px;align-items:start;padding:8px 10px;background:#13100e;border:1px solid #221e18;border-radius:3px;}
+.sqid{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--gold);}
+.sqt{font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;padding-top:2px;}
+.sqd{font-size:11px;font-weight:300;color:#bbb5a8;line-height:1.5;}
+.pl{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+.pl::after{content:'';flex:1;height:1px;background:var(--border);}
+.pb{background:#0a0f0a;border:1px solid #2a4a2a;border-radius:3px;padding:13px 48px 13px 13px;position:relative;margin-bottom:11px;}
+.pt{font-family:var(--mono);font-size:11px;line-height:1.75;color:#b8e0b8;word-break:break-word;white-space:pre-wrap;}
+.nb{background:#130a0a;border:1px solid #3a1a1a;border-radius:3px;padding:11px 48px 11px 11px;position:relative;margin-bottom:11px;}
+.nl{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--a2);text-transform:uppercase;margin-bottom:5px;}
+.nt{font-family:var(--mono);font-size:10px;line-height:1.6;color:#c08888;}
+.cb{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:3px 8px;background:#1a3a1a;border:1px solid #2a5a2a;color:#7ab87a;cursor:pointer;border-radius:2px;text-transform:uppercase;transition:all .15s;}
+.cb:hover{background:#2a5a2a;}
+.cb.cp{color:var(--gold);border-color:var(--gold);}
+.pr{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px;}
+.p{font-family:var(--mono);font-size:8px;padding:2px 8px;background:#12100e;border:1px solid #2c2820;color:var(--muted);border-radius:2px;text-transform:uppercase;}
+.no{background:#0e0e12;border:1px solid #1e1e2a;border-left:3px solid #4a4a88;border-radius:2px;padding:11px;margin-top:10px;}
+.nol{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:#7878c8;text-transform:uppercase;margin-bottom:5px;}
+.not{font-size:11px;font-weight:300;color:#a0a0c0;line-height:1.6;}
+.chain{text-align:center;padding:3px 0 6px;font-family:var(--mono);font-size:9px;color:#2a2820;letter-spacing:1px;}
+@media(max-width:680px){.top,.refs,.main,.ss{padding-left:16px;padding-right:16px;}.rg{grid-template-columns:repeat(2,1fr);}.sum{grid-template-columns:repeat(2,1fr);}.gh{grid-template-columns:50px 1fr auto;}.sqr{grid-template-columns:38px 60px 1fr;}.sr{grid-template-columns:1fr;}}
+</style></head><body>
+<div class="top">
+<div class="ey">Kling 3.0 Omni &#8212; Video Generation Brief &#8212; Revised v2</div>
+<h1>Scene 2 &#8212; <em>The Slipper</em><br>Continuity-Stitched Prompt Pack</h1>
+<div class="badges">
+<span class="b hot">Kling 3.0 Omni</span>
+<span class="b">Max 15s / Gen</span>
+<span class="b">16:9 Widescreen</span>
+<span class="b">ARRI ALEXA 35</span>
+<span class="b">Kodak Vision3 500T</span>
+<span class="b rev">Revised v2 &#8212; Full Stitch Logic</span>
+</div></div>
+<div class="ss"><span class="sl">Style Bible:</span>
+<span class="st">Saturated Cinematic Warmth</span>
+<span class="st">Golden Yellows + Deep Reds</span>
+<span class="st">Practical Lamp Lighting</span>
+<span class="st">Rich Black Shadows</span>
+<span class="st">Fine Film Grain</span>
+<span class="st">Anamorphic Oval Bokeh</span>
+</div>
+<div class="refs"><div class="rtitle">Production Reference Assets</div><div class="rg">
+<div class="rc"><img class="ri" src="/mnt/user-data/uploads/freepik__-the-scenethe-living-room-is-undisturbed-the-low-w__46449.png"/><div class="rl">Location Wide</div></div>
+<div class="rc"><img class="ri" src="/mnt/user-data/uploads/freepik__photo-a-living-room-with-a-fireplace-a-wooden-coff__61389.png"/><div class="rl">Location Detail</div></div>
+<div class="rc"><img class="ri" src="/mnt/user-data/uploads/freepik__a-60yearold-asian-man-wearing-a-burgundy-cardigan-__67282.png"/><div class="rl">Yamada Costume</div></div>
+<div class="rc"><img class="ri" src="/mnt/user-data/uploads/freepik__create-a-productstyle-clothing-layout-on-a-pure-wh__74424.png"/><div class="rl">Props Slipper</div></div>
+</div></div>
+<div class="main">
+<div class="st2">Generation Overview</div>
+<div class="sum">
+<div><div class="sv">9</div><div class="sk">Generations</div></div>
+<div><div class="sv">26</div><div class="sk">Shots</div></div>
+<div><div class="sv">9</div><div class="sk">Stitch Points</div></div>
+<div><div class="sv">117s</div><div class="sk">Total Raw</div></div>
+</div>
+<div class="st2">Continuity-Stitched Kling 3.0 Prompts</div>
+<div class="gc open">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">01</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">1A</span><span class="ch1">1B</span><span class="ch1">1C</span></div><div class="chips"><span class="ch2">MS Enter from Left</span><span class="ch2">ECU Grip</span><span class="ch2">CU Low Dutch + Bridge Out</span></div><div class="gd">Yamada enters frame, removes slipper, raises it hero pose, begins tiptoe at end</div></div>
+<div class="gdu"><div class="dv">14s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Scene opening — no prior clip</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">Yamada weight-shifted forward, left knee beginning to lift, arms starting to float out — the tiptoe begins</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:36%;background:#5a3a10;">1A Enter</div>
+<div class="ts" style="width:21%;background:#7a4a18;">1B Grip ECU</div>
+<div class="ts" style="width:43%;background:#9a5a20;">1C Hero + Bridge</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">1A</div><div class="sqt">MS 5s</div><div class="sqd">Yamada walks INTO FRAME from screen left. Pauses. Removes right slipper. Grim resolve.</div></div>
+<div class="sqr"><div class="sqid">1B</div><div class="sqt">ECU 3s</div><div class="sqd">Hand grips slipper tight — knuckles white, angled like a blade.</div></div>
+<div class="sqr"><div class="sqid">1C</div><div class="sqt">CU Low 6s</div><div class="sqd">Dutch tilt low angle: slipper raised hero pose. At clip end — weight shifts forward, knee lifts, arms float out. Tiptoe beginning.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p0">60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers -- warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light. SHOT SEQUENCE:
+
+[0s-5s] MEDIUM SHOT, STATIC: Yamada walks INTO FRAME from the LEFT EDGE of screen. He pauses in the center of the room. He looks down. With slow, ceremonial deliberateness he bends and removes his right grey felt indoor house slipper from his foot. He straightens up. His expression shifts from mild irritation to grim samurai-level determination.
+
+[5s-8s] EXTREME CLOSE-UP: His hand grips the slipper. Knuckles whitening. He tilts it like a weapon blade. Warm anamorphic bokeh background.
+
+[8s-14s] LOW ANGLE CLOSE-UP, DUTCH TILT: Camera looks up from floor level. Yamada holds the slipper raised high. He stares at it with absolute conviction. Warm backlight halos him. At [12s] his posture changes: weight shifts forward onto his toes, his left knee begins to lift, arms begin to float outward from his sides. The very beginning of a tiptoe motion. End on this transitional pose.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p0',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n0">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n0',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 14s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">ENTRY: Yamada must START fully off-screen left and walk into frame. Do not start with him already visible. BRIDGE OUT: Clip MUST end with Yamada already beginning the tiptoe -- weight forward, knee lifting -- so Gen 02 opens mid-motion seamlessly.</div></div>
+</div></div>
+<div class="chain">&#8595; HANDOFF &#8594; GEN 02 OPENS ON: Yamada mid-tiptoe: left knee lifted, arms floating out, already i...</div>
+<div class="gc">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">02</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">2A</span><span class="ch1">2B</span></div><div class="chips"><span class="ch2">MS Wide Tiptoe Stalk</span><span class="ch2">CU Floor Feet</span></div><div class="gd">Opens mid-tiptoe in motion, ends with slipper cocked high ready to slam</div></div>
+<div class="gdu"><div class="dv">12s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Yamada mid-tiptoe: left knee lifted, arms floating out, already in motion</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">Yamada stopped above target, slipper raised at full arm extension overhead — cocked and loaded for slam</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:58%;background:#3a4a10;">2A Tiptoe + Raise</div>
+<div class="ts" style="width:42%;background:#4a6018;">2B Feet Insert</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">2A</div><div class="sqt">MS Wide 7s</div><div class="sqd">Opens mid-tiptoe: already in motion. Creeps forward. Stops. Raises slipper high at full extension. Hold cocked pose.</div></div>
+<div class="sqr"><div class="sqid">2B</div><div class="sqt">CU Floor 5s</div><div class="sqd">Intercut: floor level feet tiptoeing. Ends with both feet planted — the pause before the slam.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p1">60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers -- wearing ONE grey felt indoor house slipper on left foot, right foot completely bare -- warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light. SHOT SEQUENCE:
+
+[0s-7s] MEDIUM WIDE SHOT, SLOW PUSH IN: Yamada is ALREADY mid-tiptoe as the clip opens -- left knee lifted, arms floating, weight on toes. Already in motion. He creeps forward across the warm wooden floor with exaggerated slowness. At [5s] he arrives above his target (offscreen below). He halts. Both feet plant on the floor. He raises the grey felt indoor house slipper above his head to full arm extension, body coiled for the slam. Hold this cocked position.
+
+[INTERCUT 2s-7s] FLOOR LEVEL CLOSE-UP: Camera at ankle height. Left foot in grey grey felt indoor house slipper, right foot bare. Both tiptoe forward. At the end both feet stop and plant firmly.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p1',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n1">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n1',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 12s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">STITCH IN: Open with Yamada mid-tiptoe, already moving -- NOT from standing still. STITCH OUT: Slipper raised at full arm extension overhead, body loaded, the half-beat of stillness before impact. Gen 03 opens on the slam coming down.</div></div>
+</div></div>
+<div class="chain">&#8595; HANDOFF &#8594; GEN 03 OPENS ON: Camera approaching cockroach slowly -- roach in center frame grow...</div>
+<div class="gc">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">03</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">2C</span><span class="ch1">2D</span><span class="ch1">2E</span><span class="ch1">3A-bridge</span></div><div class="chips"><span class="ch2">POV Handheld</span><span class="ch2">ECU Macro</span><span class="ch2">OTS Standoff</span><span class="ch2">MS Slam Bridge</span></div><div class="gd">POV approach + cockroach inserts + the slam action. Ends frozen post-slam.</div></div>
+<div class="gdu"><div class="dv">15s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Camera approaching cockroach slowly -- roach in center frame growing larger</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">Yamada frozen post-slam: body bent forward, arm fully extended down, slipper pressed against floor</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:27%;background:#1a3a1a;">2C POV</div>
+<div class="ts" style="width:20%;background:#2a5a2a;">2D Roach ECU</div>
+<div class="ts" style="width:20%;background:#3a6a2a;">2E OTS</div>
+<div class="ts" style="width:33%;background:#6a2a10;">3A Slam</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">2C</div><div class="sqt">POV 4s</div><div class="sqd">Opens mid-approach. Cockroach close in frame, growing larger. Breathing handheld.</div></div>
+<div class="sqr"><div class="sqid">2D</div><div class="sqt">ECU 3s</div><div class="sqd">Cockroach grooming antennae. Compound eyes catch amber light. Unbothered.</div></div>
+<div class="sqr"><div class="sqid">2E</div><div class="sqt">OTS 3s</div><div class="sqd">Yamada shoulder blurred foreground, cockroach sharp center. Standoff.</div></div>
+<div class="sqr"><div class="sqid">3A bridge</div><div class="sqt">MS 5s</div><div class="sqd">Yamada brings slipper DOWN with full force. Motion blur. Slipper hits floor. Body frozen post-slam.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p2">warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light and 60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers. SHOT SEQUENCE:
+
+[0s-4s] POV HANDHELD: Camera is Yamada's eyes, ALREADY mid-approach and close to the cockroach. Slow remaining push forward. single large dark brown cockroach with long antennae and six legs sits motionless center frame. Breathing motion in the handheld. Tension.
+
+[4s-7s] MACRO EXTREME CLOSE-UP: The cockroach grooms its antennae. Compound eyes catch warm amber light. Completely unbothered. Shallow focus.
+
+[7s-10s] OVER-THE-SHOULDER SHOT: 60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers shoulder fills lower-left foreground, blurred. Sharp in center: the single large dark brown cockroach with long antennae and six legs on the floor. A standoff.
+
+[10s-15s] MEDIUM SHOT, DYNAMIC: Yamada's arm is already raised at apex. He SLAMS the grey felt indoor house slipper downward with full force. Arm whips down with motion blur. Face: teeth clenched, absolute conviction. Slipper hits floor. His arm stays extended, slipper pressed down, body bent forward and completely frozen. Hold that frozen pose.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p2',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n2">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n2',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 15s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">STITCH IN: POV opens mid-approach, already close. STITCH OUT: Yamada frozen in post-slam pose -- arm down extended, body bent forward, slipper on floor. This exact pose is the opening state of Gen 04.</div></div>
+</div></div>
+<div class="chain">&#8595; HANDOFF &#8594; GEN 04 OPENS ON: Yamada in frozen post-slam pose: body bent, arm extended down, sl...</div>
+<div class="gc">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">04</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">3B</span><span class="ch1">3C</span><span class="ch1">3D</span></div><div class="chips"><span class="ch2">WS Full Room</span><span class="ch2">INSERT Floor THWAP</span><span class="ch2">CU Face + Lift Begins</span></div><div class="gd">Slam coverage angles. Ends with Yamada straightening and slipper beginning to lift.</div></div>
+<div class="gdu"><div class="dv">13s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Yamada in frozen post-slam pose: body bent, arm extended down, slipper on floor</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">Yamada mid-straighten, slipper rising off the floor, the cautious lift in progress</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:23%;background:#6a1a0a;">3B Wide</div>
+<div class="ts" style="width:31%;background:#9a3a10;">3C Floor Insert</div>
+<div class="ts" style="width:46%;background:#ca4a20;">3D Face + Shift</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">3B</div><div class="sqt">WS 3s</div><div class="sqd">Wide: full room. Yamada frozen post-slam in domestic space.</div></div>
+<div class="sqr"><div class="sqid">3C</div><div class="sqt">INSERT 4s</div><div class="sqd">Floor level: slipper pressed flat, fine dust settling. Then slipper begins to lift slowly.</div></div>
+<div class="sqr"><div class="sqid">3D</div><div class="sqt">CU Face 6s</div><div class="sqd">Victory grimace. Then doubt creeps in. He begins to straighten and lift.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p3">60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers -- warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light. Yamada is ALREADY frozen in the post-slam position: body bent forward, arm extended down, slipper pressed to floor. SHOT SEQUENCE:
+
+[0s-3s] WIDE SHOT, LOCKED: Full body of Yamada frozen in post-slam pose in the warm living room. Domestic space frames the absurdity. Bookshelves, fireplace visible.
+
+[3s-7s] FLOOR LEVEL INSERT: The grey grey felt indoor house slipper pressed flat against the warm wooden floor. Fine dust settling around it. At [5s] the slipper begins to lift -- slowly, cautiously, from the right edge.
+
+[7s-13s] CLOSE-UP Yamada's face. Holds the victory grimace. Then at [9s] -- flicker of doubt. Brow tightens. Eyes drop. He slowly begins to straighten his body. His hand begins the motion of lifting the slipper. Clip ends with him mid-straighten, slipper rising.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p3',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n3">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n3',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 13s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">STITCH IN: Open on Yamada already in the frozen post-slam pose. STITCH OUT: He is in the motion of straightening, slipper has begun to rise -- matching the opening action of Gen 05.</div></div>
+</div></div>
+<div class="chain">&#8595; HANDOFF &#8594; GEN 05 OPENS ON: Yamada mid-straighten, completing the lift of the slipper, beginn...</div>
+<div class="gc">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">05</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">4A</span><span class="ch1">4B</span><span class="ch1">4C</span><span class="ch1">4D</span></div><div class="chips"><span class="ch2">MS Lift + Inspect</span><span class="ch2">INSERT Sole</span><span class="ch2">CU Face Full Arc</span><span class="ch2">WS Isolation</span></div><div class="gd">Nothing under the slipper. Ends with Yamada frozen, having heard the skitter.</div></div>
+<div class="gdu"><div class="dv">14s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Yamada mid-straighten, completing the lift of the slipper, beginning to peer underneath</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">Yamada utterly still and upright, eyes shifted sideways, alert -- he has heard something</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:29%;background:#1a2a4a;">4A Lift</div>
+<div class="ts" style="width:14%;background:#2a3a6a;">4B Sole</div>
+<div class="ts" style="width:36%;background:#3a4a8a;">4C Face Arc</div>
+<div class="ts" style="width:21%;background:#2a3a6a;">4D Wide Freeze</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">4A</div><div class="sqt">MS 4s</div><div class="sqd">Opens mid-lift: Yamada completing the lift, peering underneath. Confusion.</div></div>
+<div class="sqr"><div class="sqid">4B</div><div class="sqt">INSERT 2s</div><div class="sqd">Underside of slipper -- plain empty worn sole. Nothing.</div></div>
+<div class="sqr"><div class="sqid">4C</div><div class="sqt">CU Face 5s</div><div class="sqd">Full emotional arc: disbelief, confusion, embarrassment, then freeze -- he heard something.</div></div>
+<div class="sqr"><div class="sqid">4D</div><div class="sqt">WS 3s</div><div class="sqd">Wide: alone in peaceful room. Utterly frozen, head tilting slightly toward the sound.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p4">60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers -- warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light. Yamada is mid-motion, completing the lift of the grey felt indoor house slipper. SHOT SEQUENCE:
+
+[0s-4s] MEDIUM SHOT: Yamada ALREADY in the motion of completing the lift -- slipper coming up, he peers underneath. Long pause. Disbelief. He checks again. Nothing.
+
+[4s-6s] INSERT CLOSE-UP: Underside of the grey grey felt indoor house slipper, held up. Plain worn rubber sole. Wooden floor beneath: completely empty.
+
+[6s-11s] CLOSE-UP Yamada's face. Slow dawning frown. Confusion. Embarrassment. Then at [9s] he goes COMPLETELY STILL. Expression sharpens. Eyes dart sharply sideways. He heard something small offscreen. Hold this frozen alert face.
+
+[11s-14s] WIDE SHOT: Yamada utterly still mid-room, slipper in hand, head tilted very slightly toward the sound. The peaceful warm room surrounds him.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p4',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n4">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n4',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 14s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">STITCH IN: Open mid-lift. STITCH OUT: Yamada completely frozen and upright -- eyes shifted sideways, alert, still. Gen 06 opens on this same frozen alertness.</div></div>
+</div></div>
+<div class="chain">&#8595; HANDOFF &#8594; GEN 06 OPENS ON: Yamada frozen still and upright, eyes just shifted sideways -- th...</div>
+<div class="gc">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">06</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">5A</span><span class="ch1">5B</span><span class="ch1">5C</span></div><div class="chips"><span class="ch2">CU Eyes</span><span class="ch2">INSERT Macro Reveal</span><span class="ch2">POV Down + Lean Back</span></div><div class="gd">Counter-reveal: cockroach on other slipper. Ends with Yamada beginning to lean backward.</div></div>
+<div class="gdu"><div class="dv">11s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Yamada frozen still and upright, eyes just shifted sideways -- the alert listening state</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">POV camera beginning to drift and tilt backward -- Yamada's weight shifting back, start of the jump</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:27%;background:#2a1a3a;">5A Eyes</div>
+<div class="ts" style="width:37%;background:#6a2a8a;">5B ROACH REVEAL</div>
+<div class="ts" style="width:36%;background:#4a1a6a;">5C POV + Lean</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">5A</div><div class="sqt">CU Eyes 3s</div><div class="sqd">Eyes only -- already alert, dart sideways.</div></div>
+<div class="sqr"><div class="sqid">5B</div><div class="sqt">INSERT 4s</div><div class="sqd">THE reveal: cockroach calmly perched on his abandoned left slipper. Unbothered.</div></div>
+<div class="sqr"><div class="sqid">5C</div><div class="sqt">POV Down 4s</div><div class="sqd">Looks straight down. Sees it. Processes. Camera begins drifting backward -- the lean beginning.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p5">warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light. 60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers -- upright, frozen, slipper in right hand, eyes sharp. SHOT SEQUENCE:
+
+[0s-3s] EXTREME CLOSE-UP -- eyes ONLY. He is still. His eyes dart sharply LEFT. Alert. Only the eyes move. Warm side light on the iris.
+
+[3s-7s] MACRO INSERT: The grey grey felt indoor house slipper (left foot, abandoned on the floor). The single large dark brown cockroach with long antennae and six legs is perched on top of it, facing camera, grooming antennae. Warm golden floor light. Completely unbothered. Hold.
+
+[7s-11s] POV SHOT: Camera looks straight down at his feet. One bare foot, one slippered -- and on the slipper, the cockroach. At [9s] the camera begins to tilt and drift very slightly backward -- Yamada's weight is shifting back, the very first motion of his shock reaction. End on this beginning lean.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p5',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n5">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n5',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 11s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">STITCH IN: Yamada frozen alert -- match end of Gen 05. STITCH OUT: The POV has begun drifting backward. Gen 07 picks this up and explodes it into the full jump.</div></div>
+</div></div>
+<div class="chain">&#8595; HANDOFF &#8594; GEN 07 OPENS ON: Yamada mid-lean-back, weight already shifting away from the cockr...</div>
+<div class="gc">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">07</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">6A</span><span class="ch1">6B</span><span class="ch1">6C</span></div><div class="chips"><span class="ch2">MS Jump Back</span><span class="ch2">WS Cat Trip</span><span class="ch2">CU Cat</span></div><div class="gd">Jump back + cat trip. Ends with Yamada airborne, body rotating toward the door.</div></div>
+<div class="gdu"><div class="dv">14s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Yamada mid-lean-back, weight already shifting away from the cockroach</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">Yamada fully airborne and mid-rotation -- arms spread, body in the air heading toward shoji door</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:29%;background:#6a1a1a;">6A Jump</div>
+<div class="ts" style="width:43%;background:#9a2a2a;">6B Cat Trip Wide</div>
+<div class="ts" style="width:28%;background:#5a1a1a;">6C Cat CU</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">6A</div><div class="sqt">MS 4s</div><div class="sqd">Opens mid-lean: then EXPLODES backward. Arms fly. Full body panic.</div></div>
+<div class="sqr"><div class="sqid">6B</div><div class="sqt">WS 6s</div><div class="sqd">Wide locked: stumbles back, trips over cat, goes airborne. Both in frame.</div></div>
+<div class="sqr"><div class="sqid">6C</div><div class="sqt">CU Cat 4s</div><div class="sqd">Cat -- completely unbothered. One slow blink. Still.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p6">60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers -- warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light. A grey tabby cat lies calmly on the wooden floor behind Yamada. Yamada is mid-lean-back, weight already shifting away. SHOT SEQUENCE:
+
+[0s-4s] MEDIUM SHOT: Yamada is ALREADY leaning back as the clip opens. Then he EXPLODES backward in full shock. Both arms fly up and out. Mouth opens wide. Full body panic. He stumbles violently backward. Slipper still in hand.
+
+[4s-10s] WIDE SHOT -- LOCKED OFF: Yamada stumbles backward. Foot catches the grey tabby cat on the floor. He lurches, legs tangle, body tilts into a fall. Both Yamada AND the cat must be clearly visible simultaneously. At [9s] Yamada's body leaves the floor -- he is airborne, body beginning to rotate, arms spreading wide. End on him mid-air.
+
+[10s-14s] CLOSE-UP of the cat's face. Has not moved. Absolute indifference. One slow blink.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p6',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n6">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n6',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 14s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">STITCH IN: Open mid-lean-back -- weight already shifting, NOT from standing still. STITCH OUT: Yamada is airborne and mid-rotation -- Gen 08 opens on this same airborne state.</div></div>
+</div></div>
+<div class="chain">&#8595; HANDOFF &#8594; GEN 08 OPENS ON: Yamada already airborne and mid-cartwheel rotation heading toward...</div>
+<div class="gc">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">08</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">6D</span><span class="ch1">6E</span><span class="ch1">6F</span></div><div class="chips"><span class="ch2">MS Pan Mid-Air</span><span class="ch2">WS Locked Door Crash</span><span class="ch2">CU Slow-Mo + Roach Bridge</span></div><div class="gd">Cartwheel + door crash. Roach begins victory walk visible in foreground at the end.</div></div>
+<div class="gdu"><div class="dv">14s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Yamada already airborne and mid-cartwheel rotation heading toward shoji door</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">In wide shot foreground: cockroach takes first steps away from slipper, beginning to move toward kitchen</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:29%;background:#4a2a0a;">6D Cartwheel Pan</div>
+<div class="ts" style="width:50%;background:#8a4a10;">6E DOOR CRASH + Bridge</div>
+<div class="ts" style="width:21%;background:#5a3a08;">6F Slow-Mo</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">6D</div><div class="sqt">MS Pan 4s</div><div class="sqd">Opens mid-cartwheel -- already airborne. Camera pans to follow toward door.</div></div>
+<div class="sqr"><div class="sqid">6E</div><div class="sqt">WS Locked 7s</div><div class="sqd">Wide on door. Yamada bursts through. Debris settles. In foreground at end: cockroach begins walking.</div></div>
+<div class="sqr"><div class="sqid">6F</div><div class="sqt">CU Slow-Mo 3s</div><div class="sqd">Yamada face mid-crash -- eyes wide, mouth open, hair back, paper fragments.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p7">60-year-old East Asian man (Yamada), short dark hair greying at temples, wearing a deep burgundy V-neck wool cardigan over a grey button-up shirt, navy blue trousers, grey felt slip-on slippers -- warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light. A traditional Japanese sliding shoji door (white paper panels in a wooden frame) is on one wall. Yamada is ALREADY airborne and mid-cartwheel rotation. SHOT SEQUENCE:
+
+[0s-4s] MEDIUM SHOT -- Camera pans sideways to follow Yamada who is ALREADY mid-air, body rotating as the clip opens. Arms and legs fully extended. Heading toward the shoji door. Motion blur.
+
+[4s-11s] WIDE SHOT -- COMPLETELY LOCKED OFF. Full shoji door centered in frame. Then Yamada CRASHES through it with full force. White paper panels EXPLODE outward. Frame splinters. Debris flies. He disappears through. Dust and white paper fragments hang in the air. Aftermath. At [10s] in the extreme lower foreground, almost invisible: the single large dark brown cockroach with long antennae and six legs takes its first steps away from the abandoned slipper, beginning to walk calmly in the direction of the kitchen. It has begun.
+
+[11s-14s] SLOW MOTION CLOSE-UP: Yamada's face mid-crash. Eyes blown wide. Mouth open, silent scream. Hair blown back. White paper fragments float past. Warm side light.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p7',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n7">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n7',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 14s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">STITCH IN: Yamada mid-air, ALREADY rotating -- open on the airborne state. STITCH OUT: In the wide, we see the cockroach take its first steps in the foreground. Gen 09 opens with it already mid-walk.</div></div>
+</div></div>
+<div class="chain">&#8595; HANDOFF &#8594; GEN 09 OPENS ON: Cockroach already mid-walk on the floor, moving calmly toward the...</div>
+<div class="gc">
+<div class="gh" onclick="this.parentElement.classList.toggle('open')">
+<div class="gn">09</div>
+<div class="gm"><div class="gs">Shots: <span class="ch1">7A</span><span class="ch1">7B</span></div><div class="chips"><span class="ch2">WS Low Angle Victory Walk</span><span class="ch2">INSERT Under Door</span></div><div class="gd">The button. Cockroach victory lap exits to kitchen. Scene end.</div></div>
+<div class="gdu"><div class="dv">10s</div><div class="dk">Duration</div><div class="arr">&#9660;</div></div>
+</div>
+<div class="gb">
+<div class="sr">
+<div class="sb si"><div class="sl2">&#9654; Opens On</div><div class="st3">Cockroach already mid-walk on the floor, moving calmly toward the kitchen</div></div>
+<div class="sb so"><div class="sl2">&#9632; Ends On</div><div class="st3">Scene end -- no next clip</div></div>
+</div>
+<div class="tb">
+<div class="ts" style="width:70%;background:#1a3a0a;">7A Victory Walk</div>
+<div class="ts" style="width:30%;background:#0a2a08;">7B Under Door</div>
+</div>
+<div class="sq">
+<div class="sqr"><div class="sqid">7A</div><div class="sqt">WS Low 7s</div><div class="sqd">Opens mid-walk. Cockroach unhurried. Crash debris in background. Exits through kitchen doorway.</div></div>
+<div class="sqr"><div class="sqid">7B</div><div class="sqt">INSERT 3s</div><div class="sqd">Floor level: cockroach slips under kitchen door. Warm golden light under the gap. Gone.</div></div>
+</div>
+<div class="pl">Kling 3.0 Omni &#8212; Video Prompt</div>
+<div class="pb"><pre class="pt" id="p8">warm living room interior at night, wooden floors, bookshelf with framed family photos, white fireplace with glowing embers, calligraphy scroll on wall, wooden coffee table, grey armchair, warm practical floor lamp casting golden amber light -- the shoji door is destroyed: paper shredded, debris on floor. SHOT SEQUENCE:
+
+[0s-7s] WIDE LOW-ANGLE SHOT, camera near floor level. The single large dark brown cockroach with long antennae and six legs is ALREADY mid-walk as the clip opens -- in motion from the moment we see it. FOREGROUND sharp: the cockroach moves calmly and unhurried across the warm wooden floor toward the kitchen doorway. BACKGROUND soft: the wreckage of the broken door, the quiet warm room. The cockroach is not in any hurry. It exits through the kitchen doorway.
+
+[7s-10s] MACRO FLOOR INSERT: Camera at floor level at the base of the closed kitchen door. The cockroach arrives from the right of frame and slips under the narrow gap. A warm golden light glows through the gap from the kitchen. The cockroach disappears. The door is still. Scene end.
+
+Shot on ARRI ALEXA 35 with Zeiss Supreme Primes. Kodak Vision3 500T film stock, natural fine grain, high dynamic range. Warm saturated color grading: pushed golden yellows and deep oranges, rich blacks in shadows with subtle cyan undertones. Motivated practical lighting from table lamps and fireplace glow. Soft warm side lighting. Anamorphic oval bokeh. Cinematic 16:9 widescreen.</pre><button class="cb" onclick="doCopy('p8',this,event)">Copy</button></div>
+<div class="nb"><div class="nl">&#9888; Negative Prompt</div><div class="nt" id="n8">cartoon, anime, CGI, artificial lighting, flat color, overexposed, low quality, blurry, warped faces, extra limbs, duplicate subjects, text on screen, watermark, digital noise, desaturated, cold blue tones, studio background</div><button class="cb" onclick="doCopy('n8',this,event)">Copy</button></div>
+<div class="pr">
+<span class="p">Model: Kling 3.0 Omni</span>
+<span class="p">Mode: Standard</span>
+<span class="p">Duration: 10s</span>
+<span class="p">Aspect: 16:9</span>
+<span class="p">CFG: 0.5</span>
+</div>
+<div class="no"><div class="nol">&#127916; Production Notes</div><div class="not">STITCH IN: Cockroach already mid-walk -- open in motion, bridging from Gen 08. FINAL: The warm light under the kitchen door is the scene's last visual. Push for it.</div></div>
+</div></div>
+</div>
+<script>function doCopy(id,btn,e){if(e)e.stopPropagation();var el=document.getElementById(id);if(!el)return;navigator.clipboard.writeText(el.textContent.trim()).then(function(){btn.textContent="Copied!";btn.classList.add("cp");setTimeout(function(){btn.textContent="Copy";btn.classList.remove("cp");},2000);});}</script>
+</body></html>

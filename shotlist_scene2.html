@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SCENE 2 — SHOT BREAKDOWN</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --paper: #111;
+    --card: #161616;
+    --border: #2a2a2a;
+    --accent: #f5c518;
+    --accent2: #e84040;
+    --text: #e8e8e0;
+    --muted: #666;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --display: 'Bebas Neue', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 0 0 80px; }
+  header { background: var(--accent); color: #000; padding: 28px 40px 22px; position: relative; overflow: hidden; }
+  header::after { content: '🎬'; position: absolute; right: 30px; top: 50%; transform: translateY(-50%); font-size: 64px; opacity: 0.15; }
+  .header-label { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; opacity: 0.7; margin-bottom: 6px; }
+  header h1 { font-family: var(--display); font-size: clamp(32px, 6vw, 68px); letter-spacing: 2px; line-height: 1; color: #000; }
+  header p { font-family: var(--mono); font-size: 12px; margin-top: 10px; opacity: 0.6; max-width: 600px; }
+  .scene-strip { background: #000; border-top: 3px solid var(--accent2); padding: 14px 40px; font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 1px; display: flex; gap: 30px; flex-wrap: wrap; }
+  .scene-strip span { color: var(--text); }
+  .filters { padding: 20px 40px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid var(--border); }
+  .filter-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; color: var(--muted); margin-right: 6px; }
+  .filter-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 1px; padding: 5px 14px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; border-radius: 2px; transition: all 0.15s; text-transform: uppercase; }
+  .filter-btn:hover, .filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+  .shot-count { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--muted); align-self: center; }
+  .shot-count span { color: var(--accent); font-weight: 600; }
+  .shots-container { padding: 30px 40px; display: flex; flex-direction: column; gap: 6px; }
+  .group-header { font-family: var(--display); font-size: 18px; letter-spacing: 3px; color: var(--accent2); padding: 28px 0 8px; border-bottom: 1px solid #1f1f1f; margin-bottom: 4px; display: flex; align-items: baseline; gap: 14px; }
+  .group-header .gh-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); font-weight: 400; letter-spacing: 2px; }
+  .shot-card { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: 3px; overflow: hidden; transition: border-color 0.2s, background 0.2s; cursor: pointer; }
+  .shot-card:hover { border-color: var(--accent); border-left-color: var(--accent); background: #1a1a1a; }
+  .shot-card.key-shot { border-left-color: var(--accent2); }
+  .shot-card.expanded { border-left-color: var(--accent); }
+  .shot-header { display: grid; grid-template-columns: 56px 80px 1fr 80px 24px; align-items: center; padding: 14px 18px; gap: 16px; }
+  .shot-num { font-family: var(--display); font-size: 26px; color: var(--accent); line-height: 1; }
+  .shot-num.sub { font-size: 18px; color: var(--muted); }
+  .shot-type-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 1.5px; padding: 4px 8px; background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 2px; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .shot-card.key-shot .shot-type-badge { border-color: var(--accent2); color: var(--accent2); }
+  .shot-desc { font-size: 13px; font-weight: 300; line-height: 1.4; color: var(--text); }
+  .shot-lens { font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: right; white-space: nowrap; }
+  .expand-icon { font-size: 10px; color: var(--muted); transition: transform 0.2s; text-align: center; }
+  .shot-card.expanded .expand-icon { transform: rotate(180deg); }
+  .shot-detail { display: none; padding: 0 18px 18px 18px; border-top: 1px solid #1e1e1e; }
+  .shot-card.expanded .shot-detail { display: block; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .detail-block { background: #0f0f0f; border: 1px solid #1e1e1e; border-radius: 2px; padding: 14px; }
+  .detail-block.full { grid-column: 1 / -1; }
+  .detail-title { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+  .detail-text { font-size: 12px; font-weight: 300; line-height: 1.6; color: #bbb; }
+  .prompt-box { font-family: var(--mono); font-size: 11px; line-height: 1.7; color: #c8e6a0; background: #0a0f0a; border: 1px solid #1e2e1e; border-radius: 2px; padding: 12px 60px 12px 12px; position: relative; word-break: break-word; }
+  .copy-btn { position: absolute; top: 8px; right: 8px; font-family: var(--mono); font-size: 9px; letter-spacing: 1px; padding: 3px 8px; background: #1e3a1e; border: 1px solid #2e5a2e; color: #8bc58b; cursor: pointer; border-radius: 2px; text-transform: uppercase; transition: all 0.15s; }
+  .copy-btn:hover { background: #2e5a2e; }
+  .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+  .key-badge { display: inline-block; font-family: var(--mono); font-size: 8px; letter-spacing: 2px; padding: 2px 7px; background: var(--accent2); color: #fff; border-radius: 2px; text-transform: uppercase; margin-left: 8px; vertical-align: middle; }
+  .motion-tag { display: inline-block; font-family: var(--mono); font-size: 8px; letter-spacing: 1px; padding: 2px 6px; background: #1a1a2e; border: 1px solid #2a2a50; color: #7878c8; border-radius: 2px; margin: 2px 2px 0 0; }
+  .legend { display: flex; gap: 20px; padding: 16px 40px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  @media (max-width: 680px) {
+    .detail-grid { grid-template-columns: 1fr; }
+    .shot-header { grid-template-columns: 46px 60px 1fr 20px; }
+    .shot-lens { display: none; }
+    .shots-container, .filters, .scene-strip, header { padding-left: 16px; padding-right: 16px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-label">Shot Breakdown Document — Chapter 2</div>
+  <h1>First Attack: The Slipper</h1>
+  <p>Expanded angle coverage for editorial flexibility · Cinematic / Filmic · American Slapstick ref · Nikon Banana 2 prompts included</p>
+</header>
+<div class="scene-strip">
+  <div>PRODUCTION: <span>COMEDIC ACTION SHORT</span></div>
+  <div>SCENE: <span>02</span></div>
+  <div>LOCATION: <span>INT. APARTMENT — NIGHT</span></div>
+  <div>STYLE: <span>Home Alone / Cinematic Filmic</span></div>
+  <div>TOTAL: <span id="totalCount">—</span> SHOTS</div>
+</div>
+<div class="filters">
+  <span class="filter-label">FILTER:</span>
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="key">Key Only</button>
+  <button class="filter-btn" data-filter="ECU">ECU</button>
+  <button class="filter-btn" data-filter="CU">CU</button>
+  <button class="filter-btn" data-filter="MS">MS</button>
+  <button class="filter-btn" data-filter="WS">Wide</button>
+  <button class="filter-btn" data-filter="POV">POV</button>
+  <button class="filter-btn" data-filter="INSERT">Insert</button>
+  <button class="filter-btn" data-filter="OTS">OTS</button>
+  <div class="shot-count">Showing <span id="visibleCount">—</span> shots</div>
+</div>
+<div class="shots-container" id="shotsContainer"></div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div> Key / Original Script Shot</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Coverage / Expansion Shot</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7878c8"></div> Motion / Camera Note</div>
+</div>
+<script>
+const groups = [
+  { title: "1 — Weapon Acquisition", sub: "Yamada removes and wields the slipper", shots: [
+    { id:"1A", key:true, type:"MS", desc:"Yamada slowly removes his right slipper", lens:"50mm", motion:["Static"], camera:"Waist-up, Yamada facing 3/4 toward camera. Slow, deliberate removal — almost ceremonial. Hold until the slipper is fully off.", acting:"Face shifts from mild annoyance to grim determination. This is his samurai moment.", edit:"Establish gravity. Let it breathe. Slow pull at the tail end to heighten suspense.", prompt:"Cinematic medium shot of a Japanese man in pajamas slowly and deliberately removing his right slipper indoors at night, warm practical apartment lighting, 35mm film grain, shallow depth of field, slapstick comedy Home Alone inspired, tense comedic atmosphere, photorealistic" },
+    { id:"1B", key:false, type:"ECU", desc:"ECU: Hand gripping slipper like a weapon — knuckles tight", lens:"85mm macro", motion:["Static"], camera:"Frame just hand and slipper. Knuckles whitening. Slipper angled like a blade. Pure prop acting.", acting:"The grip communicates everything. Obsessive, unhinged commitment.", edit:"Cut 1A → 1B for comedic impact. The absurdity of treating a slipper like a katana.", prompt:"Extreme close-up cinematic shot of a human hand gripping a worn household slipper tightly like a weapon, knuckles white with tension, warm interior apartment lighting, 85mm lens bokeh background, film grain, dramatic shadows, photorealistic, comedic tension" },
+    { id:"1C", key:true, type:"CU", desc:"CU Low Angle: Slipper held aloft — hero pose, Dutch tilt", lens:"35mm", motion:["Dutch tilt"], camera:"Low angle looking up at Yamada holding slipper high. Dutch tilt for absurd drama. Treat it like an action movie weapon reveal.", acting:"Yamada stares at the slipper with absolute conviction. Hero face. This is his destiny.", edit:"Score could swell here. Milk the dramatic irony — it is just a slipper.", prompt:"Low angle cinematic shot looking up at a Japanese man in pajamas heroically holding a slipper above his head in apartment interior, dramatic warm underlighting, Dutch tilt camera angle, 35mm film grain, slapstick action comedy aesthetic, photorealistic, shallow DOF" },
+  ]},
+  { title: "2 — The Approach", sub: "Yamada tiptoes toward the cockroach", shots: [
+    { id:"2A", key:true, type:"MS", desc:"Yamada tiptoes forward — full body, wide", lens:"24mm", motion:["Slow push in"], camera:"Wide to show the room. Yamada creeping forward, arms out for balance. Slow push-in tightens the tension as he approaches.", acting:"Exaggerated tiptoe — knees comically high, arms floating. Face hyper-focused.", edit:"Consider 50% slow motion to milk the absurdity of the exaggerated tiptoe walk.", prompt:"Wide cinematic shot of a Japanese man in pajamas tiptoeing exaggeratedly across a Japanese apartment at night, arms out for balance, intense focused expression, warm practical lighting, film grain, 24mm lens, slapstick comedy Home Alone style, photorealistic" },
+    { id:"2B", key:false, type:"CU", desc:"CU Floor Level: Yamada's bare foot and slippered foot tiptoeing", lens:"35mm", motion:["Static, floor level"], camera:"Ground level looking at feet. One bare foot, one slippered foot sneaking forward. Slow motion optional.", acting:"Physical comedy — the asymmetry of one armed foot, one naked foot.", edit:"Quick insert cut. Plays brilliantly as a detail gag.", prompt:"Cinematic low angle close-up of a person's feet tiptoeing on a Japanese apartment wooden floor at night, one foot bare and one wearing a slipper, slow motion feel, film grain, shallow depth of field, warm floor lighting, photorealistic" },
+    { id:"2C", key:true, type:"POV", desc:"Yamada POV: Creeping toward cockroach — horror stalk framing", lens:"28mm wide", motion:["Handheld slow creep"], camera:"First-person handheld push. Cockroach sits impossibly still center-frame. Treat it like a horror monster stalk. Very slow.", acting:"Camera IS Yamada. Subtle breathing motion in the handheld shake.", edit:"KEY tension-builder. Let the cockroach slowly fill the frame. Do not cut early.", prompt:"POV cinematic shot slowly approaching a single cockroach on a Japanese apartment floor at night, cockroach centered in frame looking tiny but ominous, warm moody lighting, 28mm wide lens, shallow focus on cockroach, handheld camera breathing motion, film grain, photorealistic, slapstick horror parody" },
+    { id:"2D", key:false, type:"INSERT", desc:"INSERT: Cockroach ECU — completely unbothered, grooming itself", lens:"Macro", motion:["Static"], camera:"Extreme closeup of cockroach grooming. Zero awareness of the violence approaching. It is calm. It is at peace.", acting:"The cockroach is the true protagonist of this film.", edit:"Cut from 2C POV → 2D insert. The contrast of Yamada's intensity vs roach's serenity IS the joke.", prompt:"Extreme macro close-up of a cockroach on a warm wooden floor in a Japanese apartment, cockroach casually grooming its antennae, shallow depth of field, dramatic rim lighting, film grain, cinematic, photorealistic, comedic villain energy" },
+    { id:"2E", key:false, type:"OTS", desc:"OTS: Over Yamada's shoulder — cockroach in foreground, standoff framing", lens:"85mm", motion:["Static"], camera:"Over Yamada's shoulder (soft) looking down at the roach sharp in center. Classic standoff. Two characters facing off.", acting:"Yamada's mass fills the lower-left. Roach claims center.", edit:"Elevates the cockroach to villain status. Use for comedic gravitas.", prompt:"Over-the-shoulder cinematic shot from behind a Japanese man in pajamas looking down at a small cockroach on the floor, man blurred in foreground, cockroach sharp in center frame, warm apartment lighting, 85mm bokeh, film grain, slapstick comedy standoff, photorealistic" },
+  ]},
+  { title: "3 — The Attack", sub: "Slipper SLAM — THWAP!", shots: [
+    { id:"3A", key:true, type:"MS", desc:"Yamada SLAMS slipper down — full arc of attack", lens:"35mm", motion:["Whip pan down"], camera:"Catch the full slam arc. Camera whips down to follow the slipper impact. Fast and decisive. Victory face mid-swing.", acting:"Yamada puts his entire soul into this. Already celebrating before it lands.", edit:"The action climax of this sequence. Fast cut rhythm, sound design carries the THWAP.", prompt:"Cinematic medium shot of a Japanese man in pajamas aggressively slamming a slipper toward the ground with full force, motion blur on arm, intense victory grimace expression, dynamic camera angle, warm apartment lighting, 35mm film grain, slapstick action, photorealistic, comedic" },
+    { id:"3B", key:false, type:"WS", desc:"Wide: Full body slam — domestic absurdity in frame", lens:"24mm", motion:["Static"], camera:"Wide to show the room context. A grown man in pajamas doing this in a cozy apartment. The environment makes it funnier.", acting:"Full physical commitment. Body extended. Back straight.", edit:"Alternate cut for wider, more absurdist read of the same beat.", prompt:"Wide cinematic shot of a Japanese man in pajamas violently slamming a slipper on an apartment floor, full body visible, domestic Japanese interior background visible, warm practical lighting, 24mm lens, film grain, Home Alone slapstick energy, photorealistic" },
+    { id:"3C", key:true, type:"INSERT", desc:"INSERT: Slipper SLAMS floor — ground level, THWAP impact", lens:"35mm low", motion:["Static, floor level"], camera:"Camera at floor level. Slipper comes INTO frame and slams. Dust or debris kicks up if possible. Impact is everything here.", acting:"Pure practical stunt. Sell the impact sound.", edit:"This IS the THWAP cut. Audio sync is everything here.", prompt:"Cinematic ground-level insert shot of a slipper slamming hard onto a Japanese apartment floor, impact moment, dust particle visible, dramatic low angle, sharp focus on slipper hitting floor, film grain, warm moody lighting, photorealistic, Home Alone style slapstick impact" },
+    { id:"3D", key:false, type:"CU", desc:"CU: Yamada face mid-slam — victory grimace, eyes wide", lens:"85mm", motion:["Static"], camera:"Tight on Yamada's face at the exact moment of slam. Eyes wide, teeth clenched, absolute conviction.", acting:"The face of a man who has already won. Tragically, catastrophically wrong.", edit:"Intercut: 3A → 3D → 3C for maximum comedic punch.", prompt:"Extreme close-up cinematic shot of a Japanese man's face showing absolute concentration and victory grimace while slamming something offscreen, eyes wide with effort, warm rim lighting, 85mm lens shallow DOF, film grain, slapstick comedy, photorealistic" },
+  ]},
+  { title: "4 — The Reveal", sub: "Nothing under the slipper", shots: [
+    { id:"4A", key:true, type:"MS", desc:"Yamada lifts slipper — cautious inspection", lens:"50mm", motion:["Static"], camera:"Mid shot. Yamada slowly, cautiously lifts and peers underneath. Hold on his face as the realization dawns.", acting:"The slow lift, the lean-in, the long pause — then confusion. Do not rush this.", edit:"The pause before the reveal is everything. Do not cut too fast. Comedy lives in the hold.", prompt:"Cinematic medium shot of a Japanese man in pajamas carefully and slowly lifting a slipper off the floor and peering underneath it, suspicious and confused expression building, warm apartment lighting, 50mm lens, film grain, slapstick comedy, photorealistic, night interior" },
+    { id:"4B", key:true, type:"INSERT", desc:"INSERT: Bottom of slipper — nothing there", lens:"Macro", motion:["Static"], camera:"Close on the underside as it lifts. Nothing. Bare, worn rubber sole. The nothing is the everything.", acting:"The absence of the cockroach IS the joke.", edit:"One second of emptiness. Maximum comedy in the nothing.", prompt:"Close-up cinematic insert of the bottom of a worn household slipper being lifted revealing nothing underneath, bare apartment floor visible, warm lighting, macro lens, film grain, photorealistic, comedic beat, nothing there" },
+    { id:"4C", key:true, type:"CU", desc:"CU: Yamada's frown — deep confusion and dawning embarrassment", lens:"85mm", motion:["Static"], camera:"Tight on Yamada's face. Slow dawning frown. He checks again. Still nothing.", acting:"Disbelief → confusion → embarrassment → heightened alertness. A full emotional arc in one face.", edit:"Hold on this face longer than feels comfortable. Comedy lives in the hold.", prompt:"Extreme close-up cinematic shot of a Japanese man's face showing deep confused disappointment and disbelief, frowning slowly, looking down at something offscreen with dawning embarrassment, warm apartment lighting, 85mm shallow DOF, film grain, photorealistic slapstick comedy" },
+    { id:"4D", key:false, type:"WS", desc:"Wide: Yamada alone in room — bent over empty spot", lens:"24mm", motion:["Static"], camera:"Pull wide. Yamada alone in frame, bent over an empty spot on the floor, slipper in hand. The room is empty. Comedic isolation.", acting:"Yamada scanning the room. Confused. The space feels too large for him now.", edit:"Re-establishes room geography before the next reveal beat.", prompt:"Wide cinematic shot of a Japanese man alone in a Japanese apartment at night bent over an empty floor spot with a slipper in hand looking confused, warm practical lighting, 24mm lens, film grain, comedic isolation slapstick, photorealistic" },
+  ]},
+  { title: "5 — The Counter", sub: "Cockroach appears on Yamada's OTHER slipper", shots: [
+    { id:"5A", key:false, type:"CU", desc:"CU: Yamada's eyes dart — he hears a skitter", lens:"85mm", motion:["Static"], camera:"Tight on just the eyes. He hears something. Eyes shift sideways. Alert. Do not move the head — just eyes.", acting:"Pure eye acting. The stillness makes the dart more dramatic.", edit:"Sound design carries this. Let the room go totally quiet then — skitter.", prompt:"Extreme close-up cinematic shot of a Japanese man's eyes darting sharply sideways in alert reaction to a sound offscreen, tense and suspicious expression, warm apartment interior lighting, 85mm, film grain, photorealistic, comedic suspense beat" },
+    { id:"5B", key:true, type:"INSERT", desc:"INSERT: Cockroach sitting calmly on Yamada's LEFT slipper", lens:"Macro", motion:["Static, ground level"], camera:"Ground level macro. The cockroach, impossibly smug, perched atop Yamada's abandoned left slipper. Hold on this moment.", acting:"The roach is doing absolutely nothing. That IS everything.", edit:"THE comedic reveal of the scene. Milk it. 2-3 full seconds on this insert.", prompt:"Macro cinematic close-up of a single cockroach perched calmly and smugly on top of a household slipper on a Japanese apartment floor, warm moody interior lighting, shallow depth of field, film grain, comedic villain energy, photorealistic, insect looks unbothered" },
+    { id:"5C", key:false, type:"POV", desc:"POV: Yamada looks down at his slipper — cockroach stares back", lens:"28mm", motion:["Handheld tremor"], camera:"First-person looking straight down. Cockroach right there on his slipper. Camera trembles slightly — Yamada processing this information.", acting:"Slight handheld shake communicates Yamada's disbelief without overplaying it.", edit:"Cut 5B insert → 5C POV for the 'oh no' escalation beat.", prompt:"POV cinematic shot looking straight down at a household slipper on a Japanese apartment floor with a cockroach sitting calmly on top, close range, warm interior lighting, wide lens, film grain, photorealistic, comedic horror realization, slapstick" },
+  ]},
+  { title: "6 — The Disaster", sub: "Jump back, trip on cat, cartwheel through door", shots: [
+    { id:"6A", key:true, type:"MS", desc:"Yamada JUMPS BACK — arms flailing, full body shock", lens:"35mm", motion:["Static, snap pan option"], camera:"Mid shot wide enough for full jump-back. Arms shoot up, legs scramble. The body does the comedy.", acting:"Full body shock response. Yamada is genuinely TERRIFIED of an insect.", edit:"Trigger of the chaos sequence. Fast cut rhythm begins here.", prompt:"Cinematic medium shot of a Japanese man in pajamas jumping suddenly backwards in shock and terror, arms flailing wildly upward, mouth open, exaggerated fearful expression, Japanese apartment interior, warm lighting, 35mm, film grain, slapstick Home Alone energy, photorealistic" },
+    { id:"6B", key:true, type:"WS", desc:"Wide: Yamada trips over the Cat — full chaos visible", lens:"24mm", motion:["Static, locked off"], camera:"Wide enough to see BOTH the cat and Yamada in frame simultaneously. We must see the cat AND the trip. Do not miss this.", acting:"Physical peak of the scene. Protect the cat. Commit to the stumble.", edit:"The wide is essential — we need cat AND trip visible simultaneously in frame.", prompt:"Wide cinematic shot of a Japanese man in pajamas tripping and stumbling over a cat lying on a Japanese apartment floor at night, full body mid-fall visible, cat visible in frame, comedic chaos, warm practical lighting, 24mm, film grain, photorealistic, slapstick Home Alone" },
+    { id:"6C", key:false, type:"CU", desc:"CU: The Cat — completely unbothered, deadpan disdain", lens:"50mm", motion:["Static"], camera:"Tight on the cat's face. It does not flinch. Absolute aristocratic disdain.", acting:"The cat IS a supporting character. Its indifference is the punchline.", edit:"Optional cutaway after 6B. The cat's nonreaction doubles the comedy.", prompt:"Cinematic close-up of a cat's face looking completely unbothered and indifferent while chaos happens around it, Japanese apartment interior, warm soft lighting, 50mm, film grain, photorealistic, comedic deadpan cat expression" },
+    { id:"6D", key:false, type:"MS", desc:"MS: Yamada mid-cartwheel toward sliding door — pan follows", lens:"35mm", motion:["Pan follows action"], camera:"Camera pans to follow Yamada's rotating body toward the door. Wide enough to see the door in frame. Keep up with the action.", acting:"Stunt moment. Exaggerate the rotation. Arms and legs out.", edit:"Transition shot into the crash. Can slow-ram this at 50% for extra comedy.", prompt:"Cinematic medium shot of a Japanese man in pajamas mid-cartwheel through the air inside a Japanese apartment, arms and legs extended, heading toward a sliding paper shoji door visible in background, motion blur, warm interior lighting, 35mm, film grain, slapstick action, photorealistic" },
+    { id:"6E", key:true, type:"WS", desc:"Wide LOCKED: Yamada crashes through sliding door — full impact", lens:"24mm", motion:["Static, locked off"], camera:"Wide, perfectly locked off on the door. Yamada bursts through. Paper and frame explode outward. Let the debris settle.", acting:"Full commitment. The bigger the crash the funnier. Trust the stunt.", edit:"Scene punctuation. Let door debris settle fully before cutting away.", prompt:"Wide cinematic locked shot of a Japanese man crashing violently through a traditional Japanese sliding paper door shoji, paper and wooden frame exploding outward, dust and debris flying, warm interior lighting, 24mm, film grain, slapstick action comedy, photorealistic, Home Alone energy" },
+    { id:"6F", key:false, type:"CU", desc:"CU Slow Motion: Yamada face mid-crash — frozen wide-eyed scream", lens:"35mm", motion:["Slow motion"], camera:"Tight on Yamada's face during the crash. Eyes wide, mouth open, hair blown back. Slow motion glory.", acting:"The face of a man experiencing consequences.", edit:"Optional hero insert in slow-mo for maximum comic grandeur. Use sparingly.", prompt:"Close-up cinematic slow motion shot of a Japanese man's face mid-crash through a door, eyes wide open in shock, mouth open in silent scream, hair blown back from impact, dramatic warm lighting, 35mm, film grain, photorealistic, comedic slapstick action hero moment" },
+  ]},
+  { title: "7 — The Button", sub: "Cockroach exits calmly to the kitchen", shots: [
+    { id:"7A", key:true, type:"WS", desc:"Wide Low: Debris settles — Cockroach scuttles to kitchen in foreground", lens:"24mm", motion:["Static, low angle"], camera:"Low wide angle. Yamada's destruction fills the background. Cockroach in extreme foreground scuttles calmly toward kitchen. Victory lap.", acting:"The cockroach walks at a completely normal pace. Zero urgency. It won.", edit:"Hold on this. Let the roach exit frame before cutting. This is the final joke.", prompt:"Wide cinematic low angle shot of a cockroach scuttling calmly across a Japanese apartment floor toward a kitchen doorway, broken door and debris visible in background from a crash, warm interior lighting, dramatic depth of field foreground cockroach sharp, 24mm, film grain, photorealistic, slapstick comedy conclusion" },
+    { id:"7B", key:false, type:"INSERT", desc:"INSERT: Cockroach disappears under kitchen door — perfect escape", lens:"Macro", motion:["Static, floor level"], camera:"Ground level tight. The cockroach slips cleanly under the kitchen door gap and vanishes. Warm light spills from under the door.", acting:"A clean, dignified exit. The cockroach has won.", edit:"Hard cut to black here or dissolve to next scene. The roach gets the last word.", prompt:"Macro cinematic close-up of a cockroach disappearing under a kitchen door gap on a Japanese apartment floor, dramatic low angle, warm golden light spilling from under the door, film grain, shallow depth of field, photorealistic, comedic final scene beat, the insect escapes" },
+  ]},
+];
+
+const container = document.getElementById('shotsContainer');
+let allCards = [];
+
+groups.forEach(group => {
+  const groupEl = document.createElement('div');
+  const gh = document.createElement('div');
+  gh.className = 'group-header';
+  gh.innerHTML = group.title + ' <span class="gh-sub">' + group.sub + '</span>';
+  groupEl.appendChild(gh);
+
+  group.shots.forEach(shot => {
+    const card = document.createElement('div');
+    card.className = 'shot-card' + (shot.key ? ' key-shot' : '');
+    card.dataset.type = shot.type;
+    card.dataset.key = shot.key ? 'key' : '';
+
+    const motionTags = shot.motion.map(m => '<span class="motion-tag">' + m + '</span>').join('');
+    card.innerHTML =
+      '<div class="shot-header">' +
+        '<div class="shot-num' + (shot.key ? '' : ' sub') + '">' + shot.id + '</div>' +
+        '<div class="shot-type-badge">' + shot.type + '</div>' +
+        '<div class="shot-desc">' + shot.desc + (shot.key ? ' <span class="key-badge">KEY</span>' : '') + '</div>' +
+        '<div class="shot-lens">' + shot.lens + '</div>' +
+        '<div class="expand-icon">▼</div>' +
+      '</div>' +
+      '<div class="shot-detail">' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px;">' + motionTags + '</div>' +
+        '<div class="detail-grid">' +
+          '<div class="detail-block"><div class="detail-title">📷 Camera / Framing</div><div class="detail-text">' + shot.camera + '</div></div>' +
+          '<div class="detail-block"><div class="detail-title">🎭 Performance Note</div><div class="detail-text">' + shot.acting + '</div></div>' +
+          '<div class="detail-block"><div class="detail-title">✂️ Editorial Note</div><div class="detail-text">' + shot.edit + '</div></div>' +
+          '<div class="detail-block full"><div class="detail-title">🖼️ Nikon Banana 2 — Image Prompt</div>' +
+            '<div class="prompt-box" id="p-' + shot.id + '">' + shot.prompt + '<button class="copy-btn" onclick="copyPrompt(\'' + shot.id + '\',event)">Copy</button></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    card.querySelector('.shot-header').addEventListener('click', () => card.classList.toggle('expanded'));
+    groupEl.appendChild(card);
+    allCards.push(card);
+  });
+
+  container.appendChild(groupEl);
+});
+
+document.getElementById('totalCount').textContent = allCards.length;
+document.getElementById('visibleCount').textContent = allCards.length;
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    allCards.forEach(card => {
+      const typeMatch = f === 'all' || card.dataset.type === f;
+      const keyMatch = f === 'key' ? card.dataset.key === 'key' : true;
+      card.style.display = (typeMatch && keyMatch) ? '' : 'none';
+    });
+    document.getElementById('visibleCount').textContent = allCards.filter(c => c.style.display !== 'none').length;
+  });
+});
+
+function copyPrompt(id, e) {
+  e.stopPropagation();
+  const box = document.getElementById('p-' + id);
+  const btn = box.querySelector('.copy-btn');
+  const text = box.textContent.replace('Copy','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+</script>
+</body>
+</html>
